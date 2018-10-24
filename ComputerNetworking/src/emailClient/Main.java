@@ -156,8 +156,14 @@ public class Main {
 									System.out.println("登录成功！！！");
 									dos.writeBytes("quit\r\n");
 									dos.flush();
-									WriteAndSendEmail send = new WriteAndSendEmail(username,password);
-									send.setVisible(true);
+
+									//WriteAndSendEmail send = new WriteAndSendEmail(username,password);
+									//send.setVisible(true);
+
+									SelectPage selpage = new SelectPage(username,password);
+									selpage.setVisible(true);
+
+
 									frame.dispose();
 								}
 							}
