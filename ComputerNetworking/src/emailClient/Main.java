@@ -55,6 +55,8 @@ public class Main {
 	private void initialize() {
 		String username;
 		String password;
+		String realm="qq";
+
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 502);
 		//设置整个页面的大小
@@ -160,7 +162,7 @@ public class Main {
 									//WriteAndSendEmail send = new WriteAndSendEmail(username,password);
 									//send.setVisible(true);
 
-									SelectPage selpage = new SelectPage(username,password);
+									SelectPage selpage = new SelectPage(username,password,realm);
 									selpage.setVisible(true);
 
 

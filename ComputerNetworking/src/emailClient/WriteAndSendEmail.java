@@ -36,7 +36,7 @@ public class WriteAndSendEmail extends JFrame {
 	 * @param username
 	 * @param password
 	 */
-	public WriteAndSendEmail(String username, String password) {
+	public WriteAndSendEmail(String username, String password,String realm) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 498);
 		contentPane = new JPanel();

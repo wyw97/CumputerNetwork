@@ -28,7 +28,7 @@ import java.awt.event.ActionEvent;
 public class SelectPage extends JFrame{
     private JPanel contentPane;
 
-    public SelectPage(String username,String password){
+    public SelectPage(String username,String password,String realm){
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 450, 498);
 
@@ -45,7 +45,7 @@ public class SelectPage extends JFrame{
         btnSnd.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                WriteAndSendEmail send = new WriteAndSendEmail(username,password);
+                WriteAndSendEmail send = new WriteAndSendEmail(username,password,realm);
                 send.setVisible(true);
             }
         });
@@ -56,12 +56,16 @@ public class SelectPage extends JFrame{
 
 
         JButton btnRead = new JButton("view");
-        btnRead.addActionListener(new ActionListener() {
+        btnRead.addActionListener(new ActionListener(){
            // @Override
             public void actionPerformed(ActionEvent e) {
-                ReceiveAndReadEmail read = new ReceiveAndReadEmail(username,password);
-                read.setVisible(true);
-            }
+                try {
+                    ReceiveAndReadEmail read = new ReceiveAndReadEmail(username, password, realm);
+                    read.setVisible(true);
+                }catch (Exception e2){
+                    e2.printStackTrace();
+                }
+             }
         });
         btnRead.setFont(new Font("Consolas", Font.BOLD, 16));
         btnRead.setBounds(157, 103, 93, 37);
