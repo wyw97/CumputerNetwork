@@ -7,10 +7,10 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/jar/javax.mail.jar!/" />
+          <root url="jar://$MODULE_DIR$/jar/activation.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -19,7 +19,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/jar/activation.jar!/" />
+          <root url="jar://$MODULE_DIR$/jar/javax.mail.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
