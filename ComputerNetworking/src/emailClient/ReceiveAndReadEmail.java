@@ -13,17 +13,11 @@ import java.awt.EventQueue;
 import javax.mail.*;
 import javax.mail.util.ByteArrayDataSource;
 import javax.sql.DataSource;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JMenuBar;
-import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.SystemColor;
-import javax.swing.JTextArea;
-import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.*;
 
@@ -60,10 +54,10 @@ import javax.mail.util.ByteArrayDataSource;
 public class ReceiveAndReadEmail extends JFrame{
 
     private Socket socket = null;
-
+    public int tot_email = 1;
 
     private JPanel contentPane;
-    //private JTextField textField;
+    private JTextField textField;
 
     public ReceiveAndReadEmail(String username, String password, String realm){
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -73,6 +67,18 @@ public class ReceiveAndReadEmail extends JFrame{
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
         contentPane.setLayout(null);
+
+
+        //JButton PageSelect = new JButton("Page");
+        JTextPane textPane = new JTextPane();
+        textPane.setEditable(false);
+        textPane.setText("Page : ");
+        textPane.setFont(new Font("Consolas", Font.PLAIN, 15));
+        textPane.setBackground(new Color(173, 216, 230));
+        textPane.setBounds(10, 10, 85, 31);
+        contentPane.add(textPane);
+
+
 
         //open ssl-lock
         try {
@@ -108,11 +114,39 @@ public class ReceiveAndReadEmail extends JFrame{
 
                         folder.open(Folder.READ_WRITE);
 
-                        System.out.println("unread: " + folder.getMessageCount());
+                        System.out.println("total number: " + folder.getMessageCount());
 
 
                         Message[] messages = folder.getMessages();
-                        parseMessage(messages);
+                        //int tot_mess = parseMessage(messages);
+                        int tot_mess = messages.length;
+                        String[] Number = new String[tot_mess];
+                        for(int i = 0; i < tot_mess; i++){
+                            Number[i] = Integer.toString(i + 1);
+                        }
+                        System.out.println("Total number 2: "+tot_mess);
+
+                        JComboBox selPage = new JComboBox(Number);
+                        selPage.setEditable(true);
+                        selPage.addActionListener(new ActionListener() {
+                            public void actionPerformed(ActionEvent e){
+                                int num_index = ((JComboBox)e.getSource()).getSelectedIndex();
+                                System.out.println("Num index: "+num_index);
+                                //Message[] temp_messages = new Message[1];
+                                //temp_messages[0] = messages[tot_mess-1-num_index];
+                                try{
+                                    parseMessage(messages,num_index);
+                                }catch(IOException ioex){
+                                    ioex.printStackTrace();
+                                }catch(MessagingException meex){
+                                    meex.printStackTrace();
+                                }
+
+                            }
+                        });
+                        selPage.setFont(new Font("Consolas", Font.BOLD, 16));;
+                        selPage.setBounds(125,10,85,40);
+                        contentPane.add(selPage);
 
                         folder.close(true);
                         store.close();
@@ -128,13 +162,21 @@ public class ReceiveAndReadEmail extends JFrame{
     }
 
 
-    public static void parseMessage(Message[] messages) throws MessagingException, IOException {
+    public static void parseMessage(Message[] messages,int index) throws MessagingException, IOException {
         if (messages == null || messages.length < 1)
             throw new MessagingException("未找到要解析的邮件!");
-
+        String DocuPath = "/Users/wangyiwen/Desktop/ComputerNetworking/wangyiwenemail/";
+        File file = new File(DocuPath);
+        if(!file.exists()){
+            file.mkdir();
+        }
         // 解析所有邮件
         int cnt_mess = messages.length;
-        for (int i = 0; i < Math.min(cnt_mess,10); i++){//最后是要全部解析的
+        for(int i = index; i <= index; i++){
+        //for (int i = index; i < Math.min(cnt_mess,20); i++){//最后是要全部解析的
+            if(!messages[i].getFolder().isOpen()){
+                messages[i].getFolder().open(Folder.READ_WRITE);
+            }
             MimeMessage msg = (MimeMessage)messages[cnt_mess-1-i];//最新的邮件在最后面
 
             System.out.println("------------------解析第" + i + "封邮件-------------------- ");
@@ -152,13 +194,13 @@ public class ReceiveAndReadEmail extends JFrame{
 
             System.out.println("是否包含附件：" + isContainerAttachment);
             if (isContainerAttachment) {
-                saveAttachment(msg, "/Users/wangyiwen/Desktop/ComputerNetworking/"+msg.getSubject() + "_"+i+"_"); //保存附件
+                saveAttachment(msg, DocuPath+msg.getSubject() + "_"+i+"_"); //保存附件
             }
 
             StringBuffer content = new StringBuffer(30);
           //  System.out.println("Text: "+MimeUtility.getEncoding(msg.getContent()));
             getMailTextContent(msg, content);
-            String recordPath = "/Users/wangyiwen/Desktop/ComputerNetworking/"+i+"_mail.txt";
+            String recordPath = DocuPath+i+"_mail.html";
             File fw = new File(recordPath);
             try{
                 BufferedWriter bw = new BufferedWriter(new FileWriter(fw));
@@ -173,6 +215,7 @@ public class ReceiveAndReadEmail extends JFrame{
             System.out.println();
 
         }
+        //return cnt_mess;
     }
 
 

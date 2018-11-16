@@ -89,7 +89,10 @@ public class WriteAndSendEmail extends JFrame {
 				textField.setText("");
 				textField_1.setText("");
 				textArea.setText("");
-				System.exit(0);
+				SelectPage selpage = new SelectPage(username,password,realm);
+				selpage.setVisible(true);
+
+				//System.exit(0);
 			}
 		});
 		btnCansel.setFont(new Font("Consolas", Font.BOLD, 16));
